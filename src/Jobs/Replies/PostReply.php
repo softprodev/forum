@@ -1,12 +1,13 @@
 <?php
 
-namespace Socieboy\Forum\Jobs;
+namespace Socieboy\Forum\Jobs\Replies;
 
 use App\Jobs\Job;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Support\Facades\Auth;
 use League\CommonMark\CommonMarkConverter;
 use Socieboy\Forum\Entities\Replies\ReplyRepo;
+use Socieboy\Newsletter\Subscriber\SubscriberList;
 
 class PostReply extends Job implements SelfHandling
 {
@@ -55,6 +56,8 @@ class PostReply extends Job implements SelfHandling
 
         $reply->save();
 
+        return $reply;
+
     }
 
     /**
@@ -70,4 +73,5 @@ class PostReply extends Job implements SelfHandling
             'message'   => $this->converter->convertToHtml($this->message),
         ];
     }
+
 }
