@@ -21,7 +21,7 @@ class ConversationController extends Controller
      */
     function __construct(ConversationRepo $conversationRepo)
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['only' => ['store']]);
 
         $this->conversationRepo = $conversationRepo;
 
@@ -53,9 +53,12 @@ class ConversationController extends Controller
 
         $conversation = $this->dispatchFrom('Socieboy\Forum\Jobs\Conversations\StartConversation', $request);
 
-        $this->dispatch(
-            new CreateConversationThread($conversation)
-        );
+        if(config('forum.emails.fire'))
+        {
+            $this->dispatch(
+                new CreateConversationThread($conversation)
+            );
+        }
 
         return redirect()->route('forum');
     }

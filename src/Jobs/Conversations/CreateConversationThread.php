@@ -16,6 +16,11 @@ class CreateConversationThread extends Job implements SelfHandling, ShouldQueue
     use InteractsWithQueue, SerializesModels;
 
     /**
+     * @var string
+     */
+    protected $grouping;
+
+    /**
      * @var mixed
      */
     protected $list;
@@ -35,6 +40,7 @@ class CreateConversationThread extends Job implements SelfHandling, ShouldQueue
 
         $this->list = config('forum.emails.list');
 
+        $this->grouping = 'Forum';
     }
 
     /**
@@ -46,7 +52,6 @@ class CreateConversationThread extends Job implements SelfHandling, ShouldQueue
      */
     public function handle(Group $group, Subscriber $subscriber)
     {
-        if( ! config('forum.emails.fire') ) return true;
 
         $this->createThread($group);
 
@@ -60,17 +65,15 @@ class CreateConversationThread extends Job implements SelfHandling, ShouldQueue
 
     /**
      * @param Group $group
-     *
-     * @return \associative_array
      */
     public function createThread(Group $group)
     {
-        if(! $group->has($this->list, 'Forum'))
+        if(! $group->has($this->list, $this->grouping))
         {
-            return $group->grouping($this->list, 'Forum', ['groups' => $this->conversation->slug]);
+            $group->grouping($this->list, $this->grouping, ['groups' => $this->conversation->slug]);
+        }else{
+            $group->group($this->list, $this->conversation->slug);
         }
-
-        return $group->group($this->list, $this->conversation->slug);
     }
 
     /**
@@ -81,7 +84,7 @@ class CreateConversationThread extends Job implements SelfHandling, ShouldQueue
         return [
             'GROUPINGS' => [
                 [
-                    'name' => 'Forum',
+                    'name' => $this->grouping,
                     'groups' => [$this->conversation->slug]
                 ]
             ]
