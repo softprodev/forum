@@ -59,12 +59,12 @@ class PostReply extends Job implements SelfHandling
 
         $reply->save();
 
-        if(config('forum.emails.fire') && ! $this->authUserIsOwner($reply->conversation)) {
+        if(config('forum.emails.fire') && auth()->user()->id != $reply->user_id) {
 
             $this->sendEmail($mailer, $reply);
         }
 
-        if(config('forum.broadcasting') && ! $this->authUserIsOwner($reply->conversation))
+        if(config('forum.broadcasting') && auth()->user()->id != $reply->user_id)
         {
             event(new NewReply($reply));
         }
@@ -107,17 +107,6 @@ class PostReply extends Job implements SelfHandling
                 ->subject(config('forum.emails.subject'));
 
         });
-    }
-
-    /**
-     * Return true if the auth user is the owner of the conversation where the reply was left
-     *
-     * @param $conversation
-     * @return bool
-     */
-    protected function authUserIsOwner($conversation)
-    {
-        return auth()->user()->id == $conversation->user_id;
     }
 
 }

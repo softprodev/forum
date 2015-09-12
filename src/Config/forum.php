@@ -112,8 +112,6 @@ return [
     'icons' => [
         'like'              => 'glyphicon glyphicon-thumbs-up',
         'correct-answer'    => 'glyphicon glyphicon-ok',
-        'edit'              => 'glyphicon glyphicon-pencil',
-        'delete'            => 'glyphicon glyphicon-trash'
     ],
 
     /**

@@ -3,13 +3,10 @@
 namespace Socieboy\Forum\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Socieboy\Forum\Entities\Replies\ReplyRepo;
 use Socieboy\Forum\Jobs\Replies\SubscribeUserToThread;
 use Socieboy\Forum\Jobs\SetCorrectAnswerStatus;
 use Socieboy\Forum\Requests\CorrectAnswerRequest;
 use Socieboy\Forum\Requests\CreateReplyRequest;
-use Socieboy\Forum\Requests\DeleteReplyRequest;
 
 class RepliesController extends Controller
 {
@@ -19,13 +16,10 @@ class RepliesController extends Controller
 
     /**
      * Implements the reply
-     *
-     * @param ReplyRepo $replyRepo
      */
-    function __construct(ReplyRepo $replyRepo)
+    function __construct()
     {
         $this->middleware('auth');
-        $this->replyRepo = $replyRepo;
     }
 
     /**
@@ -55,15 +49,6 @@ class RepliesController extends Controller
         $this->dispatchFrom('Socieboy\Forum\Jobs\CheckCorrectAnswer', $request);
 
         return redirect()->back();
-    }
-
-    public function destroy(DeleteReplyRequest $request, $slug, $reply_id)
-    {
-        $reply = $this->replyRepo->findOrFail($reply_id);
-
-        $reply->delete();
-
-        return redirect()->route('forum.conversation.show', $slug);
     }
 
 }
