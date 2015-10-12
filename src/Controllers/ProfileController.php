@@ -1,7 +1,7 @@
 <?php
 namespace Socieboy\Forum\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {
