@@ -17,6 +17,7 @@ return [
     'no-conversations'      => 'Ingen tråde blev fundet',
     'replies-counter'       => ':replies svar i denne tråd',
     'post'                  => 'Indsend svar',
+    'replies'               => 'reply|svar',
     'post-conversation'     => 'Opret tråd',
     'cancel'                => 'Annullér',
     'text-like'             => 'Synes godt om',
@@ -24,5 +25,5 @@ return [
     'topic'                 => 'Vælg et emne',
     'message'               => 'Beskriv dit spørgsmål',
     'notification-reply'    => 'skrev et nyt svar til dit spørgsmål',
-
+    'best-answer-asker-choise' => 'Bedste svar - Valgt af opretteren'
 ];
