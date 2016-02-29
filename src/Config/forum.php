@@ -100,7 +100,7 @@ return [
         /**
          * Redirect to the login form.
          */
-        'login-url' => 'login',
+        'login-url' => 'auth/login',
     ],
 
     /**

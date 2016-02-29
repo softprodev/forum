@@ -3,9 +3,10 @@ namespace Socieboy\Forum\Jobs;
 
 use App\Jobs\Job;
 use Illuminate\Auth\Guard;
+use Illuminate\Contracts\Bus\SelfHandling;
 use Socieboy\Forum\Entities\Likes\LikeRepo;
 
-class UnLikeReply extends Job
+class UnLikeReply extends Job implements SelfHandling
 {
     /**
      * @var int

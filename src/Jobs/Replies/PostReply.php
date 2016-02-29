@@ -2,13 +2,13 @@
 namespace Socieboy\Forum\Jobs\Replies;
 
 use App\Jobs\Job;
+use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Mail\Mailer;
-use Socieboy\Forum\Events\NewReply;
-use League\CommonMark\CommonMarkConverter;
 use Socieboy\Forum\Entities\Replies\Reply;
 use Socieboy\Forum\Entities\Replies\ReplyRepo;
+use Socieboy\Forum\Events\NewReply;
 
-class PostReply extends Job
+class PostReply extends Job implements SelfHandling
 {
     /**
      * @var int
@@ -21,11 +21,6 @@ class PostReply extends Job
     protected $message;
 
     /**
-     * @var CommonMarkConverter
-     */
-    protected $converter;
-
-    /**
      * Create a new job instance.
      *
      * @param int    $conversation_id
@@ -35,7 +30,6 @@ class PostReply extends Job
     {
         $this->conversation_id = $conversation_id;
         $this->message = strip_tags($message);
-        $this->converter = new CommonMarkConverter();
     }
 
     /**
@@ -69,9 +63,9 @@ class PostReply extends Job
     public function prepareData()
     {
         return [
-            'user_id'         => auth()->User()->id,
+            'user_id'         => auth()->user()->id,
             'conversation_id' => $this->conversation_id,
-            'message'         => $this->converter->convertToHtml($this->message),
+            'message'         => $this->message,
         ];
     }
 
