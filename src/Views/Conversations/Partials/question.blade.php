@@ -19,12 +19,10 @@
 
 
             <div class="content">
-                {!! nl2br($commonMark->convertToHtml($conversation->message)) !!}
+                {!! nl2br($conversation->message) !!}
             </div>
 
         </div>
-
-        @include('Forum::Conversations.Partials.footer')
 
     </div>
 

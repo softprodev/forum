@@ -4,6 +4,7 @@ namespace Socieboy\Forum\Jobs;
 use App\Jobs\Job;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 use Socieboy\Forum\Entities\Likes\LikeRepo;
 
 class LikeReply extends Job implements SelfHandling
@@ -46,7 +47,7 @@ class LikeReply extends Job implements SelfHandling
     public function prepareData()
     {
         return [
-            'user_id' =>auth()->user()->id,
+            'user_id' => Auth::User()->id,
             'reply_id' => $this->reply_id
         ];
     }

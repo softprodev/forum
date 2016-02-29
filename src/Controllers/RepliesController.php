@@ -10,7 +10,6 @@ use Socieboy\Forum\Requests\CorrectAnswerRequest;
 use Socieboy\Forum\Requests\CreateReplyRequest;
 use Socieboy\Forum\Requests\DeleteReplyRequest;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Socieboy\Forum\Requests\UpdateReplyRequest;
 
 class RepliesController extends Controller
 {
@@ -39,21 +38,6 @@ class RepliesController extends Controller
     public function store(CreateReplyRequest $request, $slug)
     {
         $this->dispatchFrom('Socieboy\Forum\Jobs\Replies\PostReply', $request);
-
-        return redirect()->route('forum.conversation.show', $slug);
-    }
-
-    public function edit($slug, $reply_id)
-    {
-        $reply        = $this->replyRepo->find($reply_id);
-        $conversation = $reply->conversation;
-
-        return view('Forum::Replies.edit')->with(compact('reply', 'conversation'));
-    }
-
-    public function update(UpdateReplyRequest $request, $slug, $reply_id)
-    {
-        $this->dispatchFrom('Socieboy\Forum\Jobs\Replies\UpdateReply', $request);
 
         return redirect()->route('forum.conversation.show', $slug);
     }

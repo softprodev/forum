@@ -16,7 +16,7 @@
 
                 <div class="content">
 
-                    {!! nl2br($commonMark->convertToHtml($reply->message)) !!}
+                    {!! nl2br($reply->message) !!}
 
                 </div>
 

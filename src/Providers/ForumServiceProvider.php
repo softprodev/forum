@@ -2,7 +2,6 @@
 namespace Socieboy\Forum\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use League\CommonMark\CommonMarkConverter;
 use Socieboy\Forum\Commands\MigrateForumCommand;
 use Illuminate\Support\Facades\App;
 
@@ -30,7 +29,7 @@ class ForumServiceProvider extends ServiceProvider
     {
         App::register(\EasySlug\EasySlug\EasySlugServiceProvider::class);
 
-        $this->app->bindShared(
+        $this->app->bind(
             'command.forum.table',
             function ($app) {
                 return new MigrateForumCommand();
@@ -49,7 +48,7 @@ class ForumServiceProvider extends ServiceProvider
         $this->publishes(
             [
                 __DIR__ . '/../Config/forum.php' => base_path('config/forum.php'),
-                __DIR__ . '/../Style/forum'      => base_path('resources/assets/less/forum'),
+                __DIR__ . '/../Style/forum' => base_path('resources/assets/less/forum'),
             ]
         );
     }
@@ -61,19 +60,5 @@ class ForumServiceProvider extends ServiceProvider
     {
         view()->share('template', config('forum.template'));
         view()->share('content', config('forum.content'));
-
-        view()->composer('Forum::Topics.index', function ($view) {
-            $view->with('all', config('forum.icons.all'));
-        });
-
-        view()->composer(
-            [
-                'Forum::Conversations.show',
-                'Forum::Replies.show',
-            ],
-            function ($view) {
-                $view->with('commonMark', new CommonMarkConverter());
-            }
-        );
     }
 }

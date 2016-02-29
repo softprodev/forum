@@ -4,6 +4,8 @@ namespace Socieboy\Forum\Jobs\Replies;
 use App\Jobs\Job;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Auth;
+use League\CommonMark\CommonMarkConverter;
 use Socieboy\Forum\Entities\Replies\Reply;
 use Socieboy\Forum\Entities\Replies\ReplyRepo;
 use Socieboy\Forum\Events\NewReply;
@@ -21,6 +23,11 @@ class PostReply extends Job implements SelfHandling
     protected $message;
 
     /**
+     * @var CommonMarkConverter
+     */
+    protected $converter;
+
+    /**
      * Create a new job instance.
      *
      * @param int    $conversation_id
@@ -30,6 +37,7 @@ class PostReply extends Job implements SelfHandling
     {
         $this->conversation_id = $conversation_id;
         $this->message = strip_tags($message);
+        $this->converter = new CommonMarkConverter();
     }
 
     /**
@@ -50,7 +58,7 @@ class PostReply extends Job implements SelfHandling
             $this->sendEmail($mailer, $reply);
         }
 
-        if (config('forum.events.fire')) {
+        if (config('forum.broadcasting') && !$this->authUserIsOwner($reply->conversation)) {
             event(new NewReply($reply));
         }
     }
@@ -63,9 +71,9 @@ class PostReply extends Job implements SelfHandling
     public function prepareData()
     {
         return [
-            'user_id'         => auth()->user()->id,
+            'user_id'         => auth()->User()->id,
             'conversation_id' => $this->conversation_id,
-            'message'         => $this->message,
+            'message'         => $this->converter->convertToHtml($this->message),
         ];
     }
 
