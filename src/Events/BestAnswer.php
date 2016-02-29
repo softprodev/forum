@@ -2,11 +2,9 @@
 namespace Socieboy\Forum\Events;
 
 use App\Events\Event;
-use Illuminate\Queue\SerializesModels;
 use Socieboy\Forum\Entities\Replies\Reply;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class NewReply extends Event implements ShouldBroadcast
+class BestAnswer extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 

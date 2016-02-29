@@ -1,9 +1,9 @@
 <?php
 namespace Socieboy\Forum\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Socieboy\Forum\Commands\MigrateForumCommand;
-use Illuminate\Support\Facades\App;
 
 class ForumServiceProvider extends ServiceProvider
 {
@@ -60,5 +60,9 @@ class ForumServiceProvider extends ServiceProvider
     {
         view()->share('template', config('forum.template'));
         view()->share('content', config('forum.content'));
+
+        view()->composer('Forum::Topics.index', function ($view) {
+            $view->with('all', config('forum.icons.all'));
+        });
     }
 }
